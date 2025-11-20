@@ -1,3 +1,14 @@
+---
+title: Distill RAG
+emoji: 🧩
+colorFrom: blue
+colorTo: green
+sdk: static
+pinned: false
+---
+
+# Distill RAG
+A lightweight pipeline for extraction, chunking, embeddings, and search.
 
 # 📘 **distill_rag — Dataset Extraction + Long-Chunk Indexing + Semantic Search for Distillation RAG Pipelines**
 
