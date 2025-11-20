@@ -16,16 +16,6 @@ tags:
 ---
 
 # Distill RAG
-A lightweight pipeline for extraction, chunking, embeddings, and search.
-
-# 📘 **distill_rag — Dataset Extraction + Long-Chunk Indexing + Semantic Search for Distillation RAG Pipelines**
-
-Here’s an updated **layman-friendly introduction** you can paste right after the metadata block and before the technical sections.
-It answers **Why**, **What**, and **How** in simple but grounded language — making it clear that this is for people who want to build **state-of-the-art domain-specific AI models**.
-
----
-
-# Distill RAG
 
 A lightweight pipeline for extraction, chunking, embeddings, and search.
 
