@@ -4,7 +4,7 @@ set -euo pipefail
 # Defaults – can be overridden via env when calling the script
 ES_NODE="${ELASTICSEARCH_NODE:-http://localhost:9200}"
 INDEX="${ES_DISTILL_INDEX:-quo_distill_index}"
-DATA_DIR="${QUO_JSON_DIR:-$HOME/liberit/hmas/data/llresearch/datasets}"
+DATA_DIR="${JSON_DIR:-$HOME/liberit/hmas/data/llresearch/datasets}"
 
 echo "[rebuild] Elasticsearch node : $ES_NODE"
 echo "[rebuild] Index              : $INDEX"
@@ -27,7 +27,7 @@ echo
 echo "[rebuild] Rebuilding index from $DATA_DIR…"
 ELASTICSEARCH_NODE="$ES_NODE" \
 ES_DISTILL_INDEX="$INDEX" \
-QUO_JSON_DIR="$DATA_DIR" \
+JSON_DIR="$DATA_DIR" \
   node indexing/index_distill_chunks.js
 
 echo
