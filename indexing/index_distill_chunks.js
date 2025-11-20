@@ -4,7 +4,7 @@
 // DRY + centralized config + async/await clean style.
 //
 // Usage:
-//   QUO_JSON_DIR=./datasets_quo node indexing/index_distill_chunks.js
+//   JSON_DIR=./datasets_quo node indexing/index_distill_chunks.js
 //
 
 require('dotenv').config();
@@ -29,11 +29,11 @@ const CONFIG = {
   CHUNK_MIN: Number(process.env.CHUNK_MIN || 5000),
 
   // Input directory
-  QUO_DIR: process.env.QUO_JSON_DIR || process.argv[2],
+  QUO_DIR: process.env.JSON_DIR || process.argv[2],
 };
 
 // NOTE: no QUO_DIR validation here – tests may require this file
-// without setting QUO_JSON_DIR.
+// without setting JSON_DIR.
 
 // ES client
 const client = new Client({ node: CONFIG.ES_NODE });
@@ -198,7 +198,7 @@ async function main() {
 
   if (!CONFIG.QUO_DIR) {
     console.error(
-      'Usage: QUO_JSON_DIR=./datasets_quo node indexing/index_distill_chunks.js'
+      'Usage: JSON_DIR=./datasets_quo node indexing/index_distill_chunks.js'
     );
     process.exit(1);
   }

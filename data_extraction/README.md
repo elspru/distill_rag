@@ -23,4 +23,4 @@ This module converts raw files → structured JSON sessions compatible with the 
 
 You can now index these with:
 
-   QUO_JSON_DIR=extracted_json node indexing/index_distill_chunks.js
+   JSON_DIR=extracted_json node indexing/index_distill_chunks.js

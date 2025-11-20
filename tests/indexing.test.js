@@ -17,7 +17,7 @@ const client = new Client({ node: ES_NODE });
 describe("Indexing", () => {
   test("Indexes 1 test session", async () => {
     // Re-index test data into quo_distill_index
-    execSync("QUO_JSON_DIR=tests/data node indexing/index_distill_chunks.js", {
+    execSync("JSON_DIR=tests/data node indexing/index_distill_chunks.js", {
       stdio: "inherit",
     });
 

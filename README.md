@@ -195,7 +195,7 @@ Manual index build:
 
 ```bash
 ES_DISTILL_INDEX=quo_distill_index \
-QUO_JSON_DIR=./extracted_sessions \
+JSON_DIR=./extracted_sessions \
 ELASTICSEARCH_NODE=http://localhost:9200 \
 node indexing/index_distill_chunks.js
 ```
@@ -332,7 +332,7 @@ Config is handled via environment variables:
 | `EMBED_MODEL`        | `mxbai-embed-large`                     | Embedding model                 |
 | `CHUNK_MIN`          | `5000`                                  | Minimum chunk size (characters) |
 | `CHUNK_MAX`          | `9000`                                  | Maximum chunk size (characters) |
-| `QUO_JSON_DIR`       | *(required)*                            | Directory of session JSON       |
+| `JSON_DIR`       | *(required)*                            | Directory of session JSON       |
 
 ---
 
