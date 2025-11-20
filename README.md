@@ -235,6 +235,24 @@ Each hit includes:
 * `source`
 * `session_date`
 
+### 🔍 Retrieval Modes
+
+`distill_rag` supports three complementary search strategies:
+
+| Mode | Description | When to Use |
+|------|-------------|--------------|
+| **BM25 (Sparse Search)** | Classic keyword relevance based on Elasticsearch match queries | Simple tests, strict keyword matching |
+| **Dense Vector Search (KNN)** | Semantic similarity using your local embedding model | Distillation, embedding-based RAG |
+| **Hybrid Search (RRF Fusion)** | Combines BM25 + Dense vectors for SOTA retrieval | Recommended default |
+
+#### Hybrid Search Example
+
+```js
+const { searchHybrid } = require("./search/search_distill_chunks");
+
+const results = await searchHybrid("how to serve others?", 5);
+console.log(results);
+
 ---
 
 ## 🧪 Running Tests
