@@ -1,25 +1,49 @@
 {
-  "name": "text-indexing-mvp",
+  "name": "distill-rag",
   "version": "1.0.0",
-  "description": "",
+  "description": "A modular pipeline for dataset extraction, long-chunk indexing, and semantic search for distillation-style RAG systems.",
   "main": "index.js",
+
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "rebuild:index": "bash rebuild_distill_index.sh",
+    "clean": "node distill_rag_cleanup.js"
   },
-  "keywords": [],
+
+  "keywords": [
+    "rag",
+    "distillation",
+    "elasticsearch",
+    "embeddings",
+    "chunking",
+    "nlp",
+    "pipeline",
+    "dataset-extraction"
+  ],
+
   "author": "",
-  "license": "ISC",
+  "license": "Apache-2.0",
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOURNAME/distill-rag"
+  },
+
+  "bugs": {
+    "url": "https://github.com/YOURNAME/distill-rag/issues"
+  },
+
+  "engines": {
+    "node": ">=18"
+  },
+
   "dependencies": {
     "@elastic/elasticsearch": "^8.17.0",
-    "@tensorflow/tfjs-node": "^4.22.0",
-    "@types/elasticsearch": "^5.0.43",
     "cheerio": "^1.1.2",
     "dotenv": "^16.4.7",
-    "elasticsearch": "^16.7.3",
-    "fs-extra": "^11.3.0",
-    "jsontokens": "^4.0.1",
-    "transformers": "^3.1.0"
+    "fs-extra": "^11.3.0"
   },
+
   "devDependencies": {
     "@jest/globals": "^30.2.0",
     "jest": "^30.2.0",
