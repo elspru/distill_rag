@@ -1,10 +1,18 @@
 ---
-title: Distill RAG
-emoji: 🧩
-colorFrom: blue
-colorTo: green
-sdk: static
+title: "distill-rag"
+emoji: "🧰"
+colorFrom: "indigo"
+colorTo: "blue"
+sdk: "static"
 pinned: false
+tags:
+  - tool
+  - rag
+  - dataset
+  - nlp
+  - text-processing
+  - search
+  - embeddings
 ---
 
 # Distill RAG
