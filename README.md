@@ -20,18 +20,93 @@ A lightweight pipeline for extraction, chunking, embeddings, and search.
 
 # 📘 **distill_rag — Dataset Extraction + Long-Chunk Indexing + Semantic Search for Distillation RAG Pipelines**
 
-`distill_rag` is a modular toolkit for building high-quality **RAG-assisted dataset distillation pipelines**.
+Here’s an updated **layman-friendly introduction** you can paste right after the metadata block and before the technical sections.
+It answers **Why**, **What**, and **How** in simple but grounded language — making it clear that this is for people who want to build **state-of-the-art domain-specific AI models**.
 
-It covers the entire early pipeline:
+---
 
-1. **Extract raw HTML** (web archives, transcripts, or scraped sources)
-2. **Clean and convert** into structured {title, turns[]} JSON sessions
-3. **Chunk** content into long semantic blocks
-4. **Embed** using any local embedding model (Ollama-compatible)
-5. **Index** into Elasticsearch with metadata
-6. **Search** using dense vector similarity
+# Distill RAG
 
-All components are independent, tested, and designed for easy integration into larger distillation loops (e.g., finetuning, self-training, iterative Q&A generation).
+A lightweight pipeline for extraction, chunking, embeddings, and search.
+
+---
+
+## 🧠 **What Is This? (Plain-Language Overview)**
+
+**distill_rag** is a small but powerful toolkit that helps you transform messy text sources (HTML pages, transcripts, articles, archives) into **clean, structured data** that AI models can learn from.
+
+It’s designed for people who want to build:
+
+* **domain-specific AI assistants**,
+* **high-quality expert models**, or
+* **distillation pipelines** where a stronger model teaches a smaller one.
+
+If you’ve ever tried to fine-tune a model and realized the hardest part is actually preparing the dataset — this toolkit solves that problem.
+
+---
+
+## 🌍 **Why This Exists**
+
+Training or distilling a specialised AI model requires **clean, coherent, well-structured data**.
+But most text you find online is:
+
+* full of ads, scripts, headers
+* chopped into small fragments
+* badly formatted
+* missing metadata
+* hard to retrieve or chunk meaningfully
+
+Before you can train a model, you need a **pipeline that turns raw text into polished training-ready data**.
+
+distill_rag gives you that pipeline.
+
+It helps you:
+
+1. pull content from raw HTML
+2. clean and structure it
+3. break it into long coherent chunks
+4. embed it locally
+5. index it with Elasticsearch
+6. perform high-quality semantic search
+
+This structure mirrors the exact data format most distillation workflows expect.
+
+The goal is simple:
+**Make it much easier for researchers and builders to create high-quality domain-specific AI models.**
+
+---
+
+## 🔧 **How It Works (At a Glance)**
+
+Here’s the full process in three steps:
+
+### **1. Extract & Clean**
+
+Feed it any folder of HTML (scraped, archived, downloaded).
+It removes noise, extracts meaningful text, and turns it into structured JSON.
+
+### **2. Chunk & Embed**
+
+The text is broken into long, context-rich chunks (ideal for distillation).
+Each chunk is embedded using a local model like `mxbai-embed-large`.
+
+### **3. Index & Search**
+
+Chunks are stored in Elasticsearch with vectors, metadata, and text.
+You can then run semantic search to retrieve the most relevant material — exactly how modern RAG and distillation pipelines work.
+
+---
+
+## 🚀 **Who Should Use This?**
+
+* AI researchers building **aligned distilled models**
+* Developers training **expert assistants**
+* Archivists working with large collections of text
+* Anyone building **custom RAG systems**
+* Or anyone who wants a clean, open, hackable indexing pipeline
+
+This project is intentionally simple, transparent, and designed to be extended.
+
 
 ---
 
