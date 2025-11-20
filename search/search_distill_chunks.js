@@ -1,68 +1,70 @@
-// searchRelevantElasticsearch.js
-require('dotenv').config();
-const { Client } = require('@elastic/elasticsearch');
+// search/search_distill_chunks.js
+require("dotenv").config();
+const { Client } = require("@elastic/elasticsearch");
+const fetch = require("node-fetch");
 
-// Load environment variables
-const ELASTICSEARCH_NODE = process.env.ELASTICSEARCH_NODE;
-const ELASTICSEARCH_INDEX = process.env.ELASTICSEARCH_INDEX;
+// Config
+const ES_NODE =
+  process.env.ES_NODE ||
+  process.env.ELASTICSEARCH_NODE ||
+  "http://localhost:9200";
 
-// Elasticsearch client configuration
-const client = new Client({ node: ELASTICSEARCH_NODE });
+const ES_INDEX =
+  process.env.ES_INDEX ||
+  process.env.ELASTICSEARCH_INDEX ||
+  "quo_distill_index";
 
-// Function to search for the most relevant document in Elasticsearch
-async function searchElasticsearch(query) {
-  try {
-    // Search for documents in Elasticsearch
-    const response = await client.search({
-      index: ELASTICSEARCH_INDEX,
-      body: {
-        query: {
-          match: {
-            content: query,
-          },
-        },
-        size: 1, // Return only the most relevant result
-        highlight: {
-          fields: {
-            content: {},
-          },
-        },
-      },
-    });
+const EMBED_URL =
+  process.env.EMBED_URL || "http://localhost:11434/api/embeddings";
 
-    // Check if the response structure is as expected
-    if (!response.body || !response.body.hits || !response.body.hits.hits) {
-      console.error('Unexpected response structure from Elasticsearch:', JSON.stringify(response.body, null, 2));
-      return;
-    }
+const EMBED_MODEL =
+  process.env.EMBED_MODEL || "mxbai-embed-large";
 
-    // Extract the most relevant result
-    const hits = response.body.hits.hits;
-    if (hits.length > 0) {
-      const mostRelevantResult = hits[0];
-      console.log('Most relevant result:');
-      console.log('ID:', mostRelevantResult._id);
-      console.log('Score:', mostRelevantResult._score);
-      console.log('Content:', mostRelevantResult.highlight ? mostRelevantResult.highlight.content.join(' ') : mostRelevantResult._source.content);
-      console.log('File Path:', mostRelevantResult._source.filePath);
-      console.log('Hostname:', mostRelevantResult._source.hostname);
-      console.log('Date:', mostRelevantResult._source.date);
-    } else {
-      console.log('No results found.');
-    }
-  } catch (error) {
-    console.error('Error searching in Elasticsearch:', error);
+if (!ES_NODE) {
+  throw new Error("ELASTICSEARCH_NODE / ES_NODE not configured");
+}
+
+const client = new Client({ node: ES_NODE });
+
+async function embedText(text) {
+  const resp = await fetch(EMBED_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: EMBED_MODEL,
+      prompt: text,
+    }),
+  });
+
+  if (!resp.ok) {
+    throw new Error(`Embedding request failed: ${resp.status}`);
   }
+
+  const data = await resp.json();
+  return data.embedding;
 }
 
-// Check if a search query is provided as a command-line argument
-if (process.argv.length < 3) {
-  console.error('Usage: node searchRelevantElasticsearch.js <search_query>');
-  process.exit(1);
+// Simple relevance search (BM25) for tests
+async function searchMostRelevant(query) {
+  const res = await client.search({
+    index: ES_INDEX,
+    query: {
+      match: {
+        content: query,
+      },
+    },
+    size: 1,
+  });
+
+  const hitsContainer = res.hits || (res.body && res.body.hits);
+  if (!hitsContainer || !hitsContainer.hits || hitsContainer.hits.length === 0) {
+    return null;
+  }
+
+  return hitsContainer.hits[0]._source;
 }
 
-// Get the search query from the command-line argument
-const query = process.argv[2];
-
-// Search for the most relevant document in Elasticsearch
-searchElasticsearch(query);
+module.exports = {
+  embedText,
+  searchMostRelevant,
+};

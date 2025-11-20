@@ -125,3 +125,15 @@ env/
 
 # VS Code
 .vscode/
+
+#
+
+node_modules/
+.env
+.DS_Store
+coverage/
+dist/
+.cache/
+*.log
+tests/data/*.log
+

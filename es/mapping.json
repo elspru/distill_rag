@@ -1,3 +1,54 @@
 {
-  "mappings": {}
+  "settings": {
+    "index": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0,
+      "mapping.total_fields.limit": 2000,
+      "mapping.depth.limit": 50,
+      "mapping.nested_objects.limit": 50000,
+      "max_result_window": 500000,
+      "analysis": {
+        "analyzer": {
+          "my_bm25": {
+            "type": "custom",
+            "tokenizer": "standard",
+            "filter": ["lowercase"]
+          }
+        }
+      }
+    }
+  },
+
+  "mappings": {
+    "properties": {
+      "content": {
+        "type": "text",
+        "analyzer": "my_bm25"
+      },
+
+      "title": { "type": "keyword" },
+      "source": { "type": "keyword" },
+      "session_date": { "type": "keyword" },
+      "chunk_index": { "type": "integer" },
+
+      "embedding": {
+        "type": "dense_vector",
+        "dims": 1024,
+        "index": true,
+        "similarity": "cosine"
+      },
+
+      "hyde_embedding": {
+        "type": "dense_vector",
+        "dims": 1024,
+        "index": false
+      },
+
+      "summary_embedding": {
+        "type": "dense_vector",
+        "dims": 1024,
+        "index": false
+      }
+    }
+  }
 }
