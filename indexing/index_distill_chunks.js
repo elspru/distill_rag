@@ -99,11 +99,48 @@ function extractAssistantText(session) {
 }
 
 // ------------------------------------------------------------
+// Progress tracker (non-spammy)
+// ------------------------------------------------------------
+function makeProgress(totalFiles) {
+  const start = Date.now();
+  let processed = 0;
+  let totalChunks = 0;
+
+  return {
+    tick(addedChunks) {
+      processed += 1;
+      totalChunks += addedChunks;
+
+      const elapsedSec = (Date.now() - start) / 1000;
+      const chunksPerSec = elapsedSec > 0 ? totalChunks / elapsedSec : 0;
+
+      const remainingFiles = totalFiles - processed;
+      const secPerFile = processed > 0 ? elapsedSec / processed : 0;
+      const etaSec = remainingFiles * secPerFile;
+
+      const pct = totalFiles > 0
+        ? ((processed / totalFiles) * 100).toFixed(1)
+        : '100.0';
+
+      // Only print occasionally to avoid flooding
+      if (processed % 10 === 0 || processed === totalFiles) {
+        process.stdout.write(
+          `\r[progress] ${processed}/${totalFiles} files | ` +
+          `${totalChunks} chunks | ` +
+          `${chunksPerSec.toFixed(1)} chunks/s | ` +
+          `ETA: ${etaSec.toFixed(1)}s | ${pct}%   `
+        );
+      }
+
+      return { processed, totalChunks };
+    },
+  };
+}
+
+// ------------------------------------------------------------
 // Index one file
 // ------------------------------------------------------------
 async function indexSessionFile(filePath) {
-  console.log(`[index] File: ${filePath}`);
-
   let session;
   try {
     session = JSON.parse(fs.readFileSync(filePath, 'utf8'));
@@ -117,13 +154,11 @@ async function indexSessionFile(filePath) {
 
   const content = extractAssistantText(session);
   if (!content.trim()) {
-    console.log('[index]   No assistant content; skipped.');
+    // No assistant content; nothing to index
     return 0;
   }
 
   const chunks = chunkContent(content);
-  console.log(`[index]   ${chunks.length} chunks`);
-
   if (!chunks.length) return 0;
 
   const docs = [];
@@ -183,18 +218,21 @@ async function main() {
   console.log(`[index] Found ${files.length} sessions`);
 
   let total = 0;
+  const progress = makeProgress(files.length);
 
   for (const filePath of files) {
     try {
       const added = await indexSessionFile(filePath);
-      total += added;
-      console.log(`[index] Running total: ${total}`);
+      const { totalChunks } = progress.tick(added);
+      total = totalChunks;
     } catch (err) {
       console.error(`[index] Error indexing ${filePath}:`, err);
     }
   }
 
-  console.log(`\n[index] DONE. Total chunks indexed: ${total}`);
+  // Ensure the progress line is ended
+  process.stdout.write('\n');
+  console.log(`[index] DONE. Total chunks indexed: ${total}`);
 }
 
 // Only run main() when executed as a script, not when required by Jest
